@@ -5,13 +5,125 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Webapp</title>
 	<script src="https://telegram.org/js/telegram-web-app.js?56"></script>
+
+	<style>
+		body {
+			padding: 0;
+			margin: 0;
+			color: #000;
+		}
+
+		.wrapper {
+			padding: 20px;
+			box-sizing: border-box;
+		}
+
+		.items {
+			display: flex;
+			flex-direction: column;
+			gap: 2rem;
+		}
+
+		.item {
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+		}
+
+		.item__preview {
+			width: 100%;
+			height: 200px;
+			background-color: #eaeaea;
+		}
+	</style>
 </head>
 <body>
-	Simple web app view
+	<div class="wrapper">
+		<div class="items" style="display: none">
+			<h3>General</h3>
+			<div class="item">
+				<div class="item__preview"></div>
+				<div class="item__title">Title Text Preview</div>
+			</div>
+			<div class="item">
+				<div class="item__preview"></div>
+				<div class="item__title">Title Text Preview</div>
+			</div>
+		</div>
+
+		<div class="items ctxone" style="display: none">
+			<h3>Context First</h3>
+			<div class="item">
+				<div class="item__preview"></div>
+				<div class="item__title">Title Text Preview</div>
+			</div>
+			<div class="item">
+				<div class="item__preview"></div>
+				<div class="item__title">Title Text Preview</div>
+			</div>
+		</div>
+
+		<div class="items ctxtwo" style="display: none">
+			<h3>Context Two</h3>
+			<div class="item">
+				<div class="item__preview"></div>
+				<div class="item__title">Title Text Preview</div>
+			</div>
+			<div class="item">
+				<div class="item__preview"></div>
+				<div class="item__title">Title Text Preview</div>
+			</div>
+			<div class="item">
+				<div class="item__preview"></div>
+				<div class="item__title">Title Text Preview</div>
+			</div>
+			<div class="item">
+				<div class="item__preview"></div>
+				<div class="item__title">Title Text Preview</div>
+			</div>
+		</div>
+	</div>
 
 	<script type="text/javascript">
 		const app = window.Telegram.WebApp
-		document.body.innerHTML = window.location.search
+		app.ready()
+
+		const items = document.getElementsByClassName("items")
+		const params = new URLSearchParams(window.location.search)
+		const context = params.get('tgWebAppStartParam')
+
+		function findByContext(name) {
+			if(name == null) {
+				const found = Array.from(items).filter(el => el.classList.value === 'items')
+				if (found) {
+					return found[0]
+				}
+			}
+
+			if (name === 'ctxone') {
+				const found = Array.from(items).filter(el => el.classList.contains('ctxone'))
+				if (found) {
+					return found[0]
+				}
+			}
+
+			if (name === 'ctxtwo') {
+				const found = Array.from(items).filter(el => el.classList.contains('ctxtwo'))
+				if (found) {
+					return found[0]
+				}
+			}
+		}
+
+		function showContext() {
+			Array.from(items).forEach(el => el.style.display == 'none')
+			const group = findByContext(context)
+			if(group) {
+				group.style.display = 'flex'
+			}
+		}
+
+		showContext()
 	</script>
 </body>
 </html>
